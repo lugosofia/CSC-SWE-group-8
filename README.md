@@ -1,4 +1,4 @@
-# CSC-SWE-group-8
+# CSC-SWE-GROUP-8
 Name of Project: Policy Vote 🗳️
 Semester: Spring 2024 💐
 Group number: 8 💪
