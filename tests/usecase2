@@ -1,0 +1,86 @@
+import java.util.Date;
+
+// User class
+class User {
+    private String username;
+    private String password;
+    private String userType;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private Date registrationDate;
+    private int pollId;
+
+    // Constructor, getters,and setters
+    public User(String username, String password, String userType, String firstName, String lastName, String email, Date registrationDate, int pollId) {
+        this.username = username;
+        this.password = password;
+        this.userType = userType;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.registrationDate = registrationDate;
+        this.pollId = pollId;
+    }
+
+    // Getters and setters
+    public String getUsername() {
+        return username;
+    }
+}
+
+// Poll class
+class Poll {
+    private int pollId;
+    private String title;
+    private String description;
+    private Date startDate;
+    private Date endDate;
+    private String questType;
+    private Date creationTime;
+
+    // Constructor, getters and setters
+    public Poll(int pollId, String title, String description, Date startDate, Date endDate, String questType, Date creationTime) {
+        this.pollId = pollId;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.questType = questType;
+        this.creationTime = creationTime;
+    }
+}
+
+// Main class for testing
+public class Main {
+    public static void main(String[] args) {
+        // Instantiate mock database objects
+        User admin = new User("admin", "admin123", "Admin", "King", "Truong", "admin@example.com", new Date(), 1);
+        User selectedUser = new User("user1", "password1", "User", "Chris", "Cooper", "user1@example.com", new Date(), 2);
+        Poll poll = new Poll(1, "Sample Poll", "Description of the poll", new Date(), new Date(), "Multiple Choice", new Date());
+
+        // Use Case #2 Implementation
+        // 1. Authentication of Admin
+        if (authenticate(admin)) {
+            // 2. Selection of User
+            // 3. Specification of New Permissions/Group Affiliation
+            String newPermissions = "Admin";
+            // 4. Update Request to Database
+            updatePermissions(selectedUser, newPermissions);
+            // 5. Notification to Admin
+            System.out.println("Permissions updated successfully.");
+        } else {
+            System.out.println("Authentication failed. Access denied.");
+        }
+    }
+
+    // Mock method to simulate authentication
+    public static boolean authenticate(User user) {
+        return user.getUsername().equals("admin") && user.getPassword().equals("admin123");
+    }
+
+    // Mock method to simulate updating permissions
+    public static void updatePermissions(User user, String newPermissions) {
+        System.out.println("Updated permissions for user " + user.getUsername() + ": " + newPermissions);
+    }
+}
