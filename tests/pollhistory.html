@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Polls</title>
+    <style>
+        /* i have not styling this yet. */
+    </style>
+</head>
+<body>
+    <h1>History Polls</h1>
+    <div id="polls-container">
+
+    </div>
+
+    <script>
+        // Fetch poll data from the server
+        fetch('https://your-api-url.com/user/polls')
+            .then(response => response.json())
+            .then(data => {
+                renderPolls(data);
+            })
+            .catch(error => console.error('Error fetching polls:', error));
+
+        // Function to render polls on the page
+        function renderPolls(polls) {
+            const pollsContainer = document.getElementById('polls-container');
+            polls.forEach(poll => {
+                const pollElement = createPollElement(poll);
+                pollsContainer.appendChild(pollElement);
+            });
+        }
+
+        // Function to create a poll element
+        function createPollElement(poll) {
+            const pollElement = document.createElement('div');
+            pollElement.classList.add('poll');
+
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = poll.title;
+            pollElement.appendChild(titleElement);
+
+            const descriptionElement = document.createElement('p');
+            descriptionElement.textContent = poll.description;
+            pollElement.appendChild(descriptionElement);
+
+            return pollElement;
+        }
+    </script>
+</body>
+</html>
