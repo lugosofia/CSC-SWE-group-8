@@ -12,12 +12,7 @@ load_dotenv()
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
-
-@app.get("/questions", response_class=HTMLResponse)
-def get_questions(request: Request):
+def get_db_connection():
     try:
         connection = mysql.connector.connect(
             host=os.getenv("HOST"),
@@ -26,6 +21,18 @@ def get_questions(request: Request):
             password=os.getenv("PASSWORD"),
             database=os.getenv("DATABASE")
         )
+        return connection
+    except Exception as e:
+        raise Exception(f"Failed to connect to the database: {str(e)}")
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
+
+@app.get("/questions", response_class=HTMLResponse)
+def get_questions(request: Request):
+    try:
+        connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute("SELECT quest_id, poll_id, quest_txt FROM questions")
         questions = cursor.fetchall()
@@ -37,13 +44,7 @@ def get_questions(request: Request):
 @app.post("/submit-answer")
 def submit_answer(request: Request, quest_id: int = Form(...), answer_text: str = Form(...)):
     try:
-        connection = mysql.connector.connect(
-            host=os.getenv("HOST"),
-            port=int(os.getenv("PORT")),
-            user="admin",
-            password=os.getenv("PASSWORD"),
-            database=os.getenv("DATABASE")
-        )
+        connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute("INSERT INTO answers (quest_id, answer_text) VALUES (%s, %s)", (quest_id, answer_text))
         connection.commit()
