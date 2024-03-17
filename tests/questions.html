@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questions Page</title>
+  <style>
+    h3 {
+      font-size: 20px;
+      color: #333;
+    }
+
+    form {
+      margin-top: 10px;
+    }
+
+    input[type="hidden"],
+    button[type="submit"] {
+      margin-right: 10px;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background-color: #f8f9fa;
+      cursor: pointer;
+    }
+
+    button[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    {% for question in questions %}
+      <div>
+        <h3>{{ question[2] }}</h3>
+        <form hx-post="/submit-answer">
+          <input type="hidden" name="quest_id" value="{{ question[0] }}">
+          <button type="submit" name="answer_text" value="yea">Yea 👍</button>
+          <button type="submit" name="answer_text" value="nay">Nay 👎</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
