@@ -5,19 +5,31 @@ from dotenv import load_dotenv
 
 import mysql.connector
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 import os
 
-load_dotenv()
+load_dotenv("/Users/administrator/Desktop/CSC-SWE-group-8/backend/.env")
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
+print(f"HOST: {os.getenv('HOST')}")
+print(f"PORT: {os.getenv('PORT')}")
+print(f"USER: {os.getenv('USER')}")
+print(f"PASSWORD: {os.getenv('PASSWORD')}")
+print(f"DATABASE: {os.getenv('DATABASE')}")
 
 def get_db_connection():
     try:
         connection = mysql.connector.connect(
             host=os.getenv("HOST"),
             port=int(os.getenv("PORT")),
-            user="admin",
+            user=os.getenv("USER"),
             password=os.getenv("PASSWORD"),
             database=os.getenv("DATABASE")
         )
