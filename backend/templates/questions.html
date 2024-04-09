@@ -1,4 +1,8 @@
-<div>
+{% extends "base.html" %}
+
+{% block content %}
+  <div hx-get="/questions" hx-trigger="load">
+    <div>
     {% for question in questions %}
       <div>
         <h3>{{ question[2] }}</h3>
@@ -10,3 +14,4 @@
       </div>
     {% endfor %}
   </div>
+</div>
