@@ -16,7 +16,7 @@ def get_db_connection():
     try:
         connection = mysql.connector.connect(
             host=os.getenv("HOST"),
-            port=int(os.getenv("PORT")),
+            # port=int(os.getenv("PORT")),
             user=os.getenv("USER"),
             password=os.getenv("PASSWORD"),
             database=os.getenv("DATABASE")
@@ -64,5 +64,18 @@ def submit_answer(request: Request, quest_id: int = Form(...), answer_text: str 
         connection.commit()
         connection.close()
         return {"message": "Answer submitted successfully"}
+
     except Exception as e:
         return {"message": "Failed to submit answer: " + str(e)}
+
+@app.get("/results", response_class=HTMLResponse)
+def get_results(request: Request):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT answer_text FROM answers")
+        results = cursor.fetchall()
+        connection.close()
+        return templates.TemplateResponse("results.html", {"request": request, "results": results})
+    except Exception as e:
+        return {"message": "Failed to answers questions: " + str(e)}
