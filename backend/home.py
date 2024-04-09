@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
+from fastapi.params import Path
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 
@@ -16,8 +17,8 @@ def get_db_connection():
     try:
         connection = mysql.connector.connect(
             host=os.getenv("HOST"),
-            # port=int(os.getenv("PORT")),
-            user=os.getenv("USER"),
+            port=int(os.getenv("PORT")),
+            user=os.getenv("DB_USER"),
             password=os.getenv("PASSWORD"),
             database=os.getenv("DATABASE")
         )
@@ -67,6 +68,18 @@ def submit_answer(request: Request, quest_id: int = Form(...), answer_text: str 
 
     except Exception as e:
         return {"message": "Failed to submit answer: " + str(e)}
+      
+@app.delete("/delete-answer/{answer_id}")
+def delete_answer(answer_id: int = Path(..., gt=0)):
+    try:
+        connection = get_db_connection()
+        cursor =connection.cursor()
+        cursor.execute("DELETE FROM answers WHERE answer_id = %s", (answer_id,))
+        connection.commit()
+        connection.close()
+        return {"message": "Answer deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to delete answer: " + str(e))
 
 @app.get("/results", response_class=HTMLResponse)
 def get_results(request: Request):
@@ -79,3 +92,7 @@ def get_results(request: Request):
         return templates.TemplateResponse("results.html", {"request": request, "results": results})
     except Exception as e:
         return {"message": "Failed to answers questions: " + str(e)}
+
+      
+
+
