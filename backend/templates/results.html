@@ -1,0 +1,18 @@
+<ul>
+  {% for answer in results %}
+  <li>
+    {{ answer[0] }}
+    <button
+      class="delete-button"
+      hx-delete="/delete-answer/{answer_id}"
+      hx-params='{"answer_id": "{{ answer[0] }}"}'
+      hx-confirm="Are you sure you want to delete this answer?"
+      hx-trigger="click"
+      hx-target="closest li"
+      hx-swap="outerHTML"
+    >
+      Delete
+    </button>
+  </li>
+  {% endfor %}
+</ul>
