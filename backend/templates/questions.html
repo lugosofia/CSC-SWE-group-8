@@ -1,17 +1,12 @@
-{% extends "base.html" %}
-
-{% block content %}
-  <div hx-get="/questions" hx-trigger="load">
-    <div>
-    {% for question in questions %}
-      <div>
-        <h3>{{ question[2] }}</h3>
-        <form hx-post="/submit-answer">
-          <input type="hidden" name="quest_id" value="{{ question[0] }}">
-          <button type="submit" name="answer_text" value="yea">Yea 👍</button>
-          <button type="submit" name="answer_text" value="nay">Nay 👎</button>
-        </form>
-      </div>
-    {% endfor %}
+<div>
+  {% for question in questions %}
+  <div>
+    <h3>{{ question[2] }}</h3>
+    <form method="post" hx-post="/submit-answer">
+      <input type="hidden" name="quest_id" value="{{ question[0] }}" />
+      <button type="submit" name="answer_text" value="yea">Yea 👍</button>
+      <button type="submit" name="answer_text" value="nay">Nay 👎</button>
+    </form>
   </div>
+  {% endfor %}
 </div>
