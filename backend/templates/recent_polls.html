@@ -1,0 +1,47 @@
+<h1>Recent Polls</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Question Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for poll in recent_polls %}
+        <tr>
+            <td>{{ poll[1] }}</td>
+            <td>{{ poll[2] }}</td>
+            <td>{{ poll[3] }}</td>
+            <td>{{ poll[4] }}</td>
+            <td>{{ poll[5] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if latest_poll %}
+<h2>Latest Poll</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Question Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ latest_poll[1] }}</td>
+            <td>{{ latest_poll[2] }}</td>
+            <td>{{ latest_poll[3] }}</td>
+            <td>{{ latest_poll[4] }}</td>
+            <td>{{ latest_poll[5] }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endif %}

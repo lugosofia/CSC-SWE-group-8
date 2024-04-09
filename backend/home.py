@@ -30,6 +30,20 @@ def get_db_connection():
 def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
+@app.get("/recent_polls", response_class=HTMLResponse)
+def get_recent_polls(request: Request):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM polls ORDER BY start_date DESC")
+        recent_polls = cursor.fetchall()
+        latest_poll = recent_polls[0] if recent_polls else None
+        print(latest_poll)
+        connection.close()
+        return templates.TemplateResponse("recent_polls.html", {"request": request, "recent_polls": recent_polls, "latest_poll": latest_poll})
+    except Exception as e:
+        return {"message": "Failed to fetch recent polls: " + str(e)}
+
 @app.get("/questions", response_class=HTMLResponse)
 def get_questions(request: Request):
     try:
@@ -53,7 +67,7 @@ def submit_answer(request: Request, quest_id: int = Form(...), answer_text: str 
         return {"message": "Answer submitted successfully"}
     except Exception as e:
         return {"message": "Failed to submit answer: " + str(e)}
-
+      
 @app.delete("/delete-answer/{answer_id}")
 def delete_answer(answer_id: int = Path(..., gt=0)):
     try:
