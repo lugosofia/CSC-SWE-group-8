@@ -65,6 +65,7 @@ def submit_answer(request: Request, quest_id: int = Form(...), answer_text: str 
         connection.commit()
         connection.close()
         return {"message": "Answer submitted successfully"}
+
     except Exception as e:
         return {"message": "Failed to submit answer: " + str(e)}
       
@@ -79,3 +80,19 @@ def delete_answer(answer_id: int = Path(..., gt=0)):
         return {"message": "Answer deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to delete answer: " + str(e))
+
+@app.get("/results", response_class=HTMLResponse)
+def get_results(request: Request):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT answer_text FROM answers")
+        results = cursor.fetchall()
+        connection.close()
+        return templates.TemplateResponse("results.html", {"request": request, "results": results})
+    except Exception as e:
+        return {"message": "Failed to answers questions: " + str(e)}
+
+      
+
+
