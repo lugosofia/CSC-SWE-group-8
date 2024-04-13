@@ -83,7 +83,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
     connection = get_db_connection()
     cursor = connection.cursor()
 
-    query = "SELECT * FROM users WHERE username = %s AND password = %s"
+    query = "SELECT user_id, username, user_type, password FROM users WHERE username = %s AND password = %s"
     values = (username, password)
     cursor.execute(query, values)
     user = cursor.fetchone()
@@ -92,8 +92,16 @@ async def login(request: Request, username: str = Form(...), password: str = For
     connection.close()
 
     if user:
-        # User authenticated successfully
-        return RedirectResponse("/dashboard", status_code=302)
+        user_type= user[2] # Assuming 'user_type' is a column in the 'users' table
+
+        print(f"User type: {user_type}") # Debug statement
+
+        if user_type == 'admin':
+            return RedirectResponse("/dashboard", status_code=302)
+        elif user_type == 'user':
+            return RedirectResponse("/recent_polls", status_code=302)
+        else:
+            raise HTTPException(status_code=403, detail="Invald user type")
     else:
         # Invalid credentials
         raise HTTPException(status_code=401, detail="Invalid username or password")
