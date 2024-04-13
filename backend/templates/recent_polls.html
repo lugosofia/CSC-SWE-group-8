@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <h1>Recent Polls</h1>
 <table>
     <thead>
@@ -17,6 +19,9 @@
             <td>{{ poll[3] }}</td>
             <td>{{ poll[4] }}</td>
             <td>{{ poll[5] }}</td>
+            <td>
+                <button hx-delete="/delete-poll/{{ poll[0] }}" hx-confirm="Are you sure you want to delete this poll?">Delete</button>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -45,3 +50,4 @@
     </tbody>
 </table>
 {% endif %}
+{% endblock %}

@@ -1,12 +1,19 @@
-<!doctype html>
-<html>
-    <head>
-        <script src="https://unpkg.com/htmx.org@1.7.0"></script>
-    </head>
-    <body>
-        <h1>Home Page</h1>
-        <div hx-get="/questions" hx-trigger="load">
-            <!-- Questions will be loaded here -->
-        </div>
-    </body>
-</html>
+{% extends "base.html" %} {% block content %}
+<h1>Welcome to the Polling App</h1>
+<p>This is the initial landing page.</p>
+<p>Use the navigation menu to access different features:</p>
+<ul>
+    <li>
+        <a href="/questions">Answer Questions</a>
+    </li>
+    <li>
+        <a href="/recent_polls">View Recent Polls</a>
+    </li>
+    <li>
+        <a href="/results">View Results</a>
+    </li>
+    <li>
+        <a href="/docs/">View Docs</a>
+    </li>
+</ul>
+{% endblock %}
