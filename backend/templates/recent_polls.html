@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Recent Polls</h1>
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Title</th>
@@ -9,9 +9,10 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Question Type</th>
+            <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody hx-target="closest tr" hx-swap="outerHTML">
         {% for poll in recent_polls %}
         <tr>
             <td>{{ poll[1] }}</td>
@@ -20,7 +21,27 @@
             <td>{{ poll[4] }}</td>
             <td>{{ poll[5] }}</td>
             <td>
-                <button hx-delete="/delete-poll/{{ poll[0] }}" hx-confirm="Are you sure you want to delete this poll?">Delete</button>
+                            <button class="btn btn-primary"
+                    hx-get="/edit-poll/{{ poll[0] }}"
+                    hx-trigger="edit"
+                    onClick="let editing = document.querySelector('.editing');
+                             if (editing) {
+                                 Swal.fire({
+                                     title: 'Already Editing',
+                                     showCancelButton: true,
+                                     confirmButtonText: 'Yep, Edit This Row!',
+                                     text: 'Hey! You are already editing a row! Do you want to cancel that edit and continue?'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         htmx.trigger(editing, 'cancel');
+                                         htmx.trigger(this, 'edit');
+                                     }
+                                 });
+                             } else {
+                                 htmx.trigger(this, 'edit');
+                             }">
+                Edit
+            </button>
             </td>
         </tr>
         {% endfor %}
@@ -29,7 +50,7 @@
 
 {% if latest_poll %}
 <h2>Latest Poll</h2>
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Title</th>
@@ -39,7 +60,7 @@
             <th>Question Type</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody hx-target="closest tr" hx-swap="outerHTML">
         <tr>
             <td>{{ latest_poll[1] }}</td>
             <td>{{ latest_poll[2] }}</td>
