@@ -135,7 +135,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
 
         if user_type == 'admin':
             return RedirectResponse("/dashboard", status_code=302)
-        elif user_type == 'user':
+        elif user_type == 'normal':
             return RedirectResponse("/recent_polls", status_code=302)
         else:
             raise HTTPException(status_code=403, detail="Invald user type")
